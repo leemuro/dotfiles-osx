@@ -1,0 +1,21 @@
+[user]
+	name = Lee Muro
+	email = lee@leemuro.com
+
+[color]
+  ui = auto
+
+[alias]
+  st = status
+  ci = commit
+  co = checkout
+  di = diff
+  amend = commit --amend
+  aa = add --all
+  head = !git l -1
+  h = !git head
+  r = !git l -20
+  l = log --graph --abbrev-commit --date=relative 
+
+[format]
+  pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
