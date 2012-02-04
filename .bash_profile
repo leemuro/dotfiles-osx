@@ -16,6 +16,3 @@ shopt -s histappend
 
 # aliases
 alias vim='mvim -v'
-
-# autorun rvmrc settings when entering directories
-if [[ -s "$HOME/.rvm/scripts/rvm" ]]  ; then source "$HOME/.rvm/scripts/rvm" ; fi
