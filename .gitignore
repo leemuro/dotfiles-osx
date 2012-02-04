@@ -15,6 +15,7 @@
 /.npm/
 /.parallels/
 /.rails-plugin-sources
+/.rbenv/
 /.rvm/
 /.serverauth.276
 /.sqlite_history

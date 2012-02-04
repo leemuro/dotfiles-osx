@@ -16,3 +16,6 @@ shopt -s histappend
 
 # aliases
 alias vim='mvim -v'
+export PATH="/usr/local/Cellar/git/1.7.9/bin:$PATH"
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
