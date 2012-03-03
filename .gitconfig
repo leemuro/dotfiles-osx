@@ -19,3 +19,5 @@
 
 [format]
   pretty=format:%C(yellow)%h%Creset -%C(red)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset
+[core]
+	excludesfile = /Users/lee/.gitignore_global
