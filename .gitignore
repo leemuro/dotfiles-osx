@@ -26,6 +26,18 @@
 /.zcompdump
 /.zsh-update
 /.zsh_history
+/.nvm
+/.config/
+/.local/
+/.netrc
+/.node-gyp/
+/.spumux
+/.psql_history
+/.pgadmin_histoqueries
+/pgadmin.log
+/.pgpass
+/.recently-used
+/.vim/.netrwhist
 /Code/
 /Desktop/
 /Documents/
@@ -37,4 +49,11 @@
 /Pictures/
 /Public/
 /Sites/
+/Evernote Export/
+/Google Drive/
+/Paprika Export/
+/Personal/
+/Software/
+/iPhoto Library/
+/iTunes Library/
 *.orig

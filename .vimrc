@@ -4,7 +4,6 @@ call pathogen#runtime_append_all_bundles()
 " colors and font
 :set t_Co=256
 syn on
-set background=dark
 colorscheme solarized
 set gfn=DejaVu\ Sans\ Mono:h12
 
@@ -36,15 +35,15 @@ nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 
+" fix paste indenting
+set pastetoggle=<F2>
+
 " testing setup
 function! RunTests(filename)
     " Write the file and run tests for the given filename
     :w
-    :silent !echo;echo;echo;echo;echo
     if filereadable("script/test")
-        exec ":!script/test " . a:filename
-    else
-        exec ":!bundle exec rspec " . a:filename
+        exec "!script/test " . a:filename
     end
 endfunction
 
@@ -61,8 +60,8 @@ function! RunTestFile(...)
     endif
 
     " Run the tests for the previously-marked file.
-    let in_spec_file = match(expand("%"), '_spec.rb$') != -1
-    if in_spec_file
+    let in_test_file = match(expand("%"), '\(.spec.js\|.spec.coffee\|_spec.rb\)$') != -1
+    if in_test_file
         call SetTestFile()
     elseif !exists("t:grb_test_file")
         return
@@ -70,22 +69,31 @@ function! RunTestFile(...)
     call RunTests(t:grb_test_file . command_suffix)
 endfunction
 
-function! RunNearestTest()
-    let spec_line_number = line('.')
-    call RunTestFile(":" . spec_line_number)
+function! s:ExecuteInShell(command)
+  let command = join(map(split(a:command), 'expand(v:val)'))
+  let winnr = bufwinnr('^' . command . '$')
+  silent! execute  winnr < 0 ? 'botright new ' . fnameescape(command) : winnr . 'wincmd w'
+  setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap number
+  echo 'Execute ' . command . '...'
+  silent! execute 'silent %!'. command
+  silent! execute 'resize ' . line('$')
+  silent! redraw
+  silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
+  silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShell(''' . command . ''')<CR>'
+  echo 'Shell command ' . command . ' executed.'
 endfunction
+command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
 
+" test commands
 map <leader>t :call RunTestFile()<cr>
-map <leader>T :call RunNearestTest()<cr>
-map <leader>a :call RunTests('spec')<cr>
+map <leader>T :call RunTests()<cr>
 
-map <leader>gs :CommandTFlush<cr>\|:CommandT app/assets/stylesheets<cr>
-map <leader>gj :CommandTFlush<cr>\|:CommandT app/assets/javascripts<cr>
-map <leader>gv :CommandTFlush<cr>\|:CommandT app/views<cr>
-map <leader>gc :CommandTFlush<cr>\|:CommandT app/controllers<cr>
-map <leader>gm :CommandTFlush<cr>\|:CommandT app/models<cr>
-map <leader>gh :CommandTFlush<cr>\|:CommandT app/helpers<cr>
-map <leader>gl :CommandTFlush<cr>\|:CommandT lib<cr>
-map <leader>gt :CommandTFlush<cr>\|:CommandT spec/<cr>
-map <leader>ga :CommandTFlush<cr>\|:CommandT spec/acceptance<cr>
+" new file commands
+map <leader>nv :e assets/js/app/views/
+map <leader>nm :e assets/js/app/models/
+map <leader>ns :e assets/css/app/
+
+" goto file commands
 map <leader>f :CommandTFlush<cr>\|:CommandT<cr>
+map <leader>gv :CommandTFlush<cr>\|:CommandT assets/js/app/views/<cr>
+map <leader>gm :CommandTFlush<cr>\|:CommandT assets/js/app/models/<cr>
